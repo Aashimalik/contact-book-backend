@@ -100,6 +100,24 @@ app.get('/api/contacts',function (req, res) {
    
 
 });
+
+app.delete('/contact/:id',(req,res)=>{
+    Contact.remove({
+        _id:req.params.id
+    },(err,result)=>{
+        if (err) {
+            res.send({
+                error: err,
+                status: false
+            })
+        } else {
+            res.send({
+                contacts:result,
+                status: true
+            })
+        }
+    })
+});
     
   
 
@@ -128,6 +146,47 @@ app.post('/contact',  function (req, res) {
     })
 });
 
+app.get('/contact/:id',function (req, res) {
+    Contact.findOne({
+        _id: req.params.id
+    }, function (err, _contact) {
+        if (err) {
+            res.status(500).json({
+                error: err,
+                status: false
+            })
+        } else {
+            res.json({
+                contact: _contact,
+                status: true
+            })
+        }
+    })
+});
+
+app.put('/contact/update/:id',function(req,res){
+    var contact=req.body;
+    console.log(req.body);
+    Contact.findByIdAndUpdate({
+        _id:req.params.id
+    },{
+        $set:contact
+    },function(err,result){
+        if(err){
+            res.status(500).json({
+                erorr:err,
+                status:false
+            })
+        }
+        else{
+            res.json({
+                contact:result,
+                status:true,
+                message:"Updated Successfully"
+            })
+        }
+    })
+});
 
 
 http.listen(PORT, function(err){
