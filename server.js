@@ -1,12 +1,16 @@
-var express=require('express');
+const express=require('express');
 const app=express();
-var PORT=process.env.PORT || 8000;
-var http=require('http').Server(app);
-var mongoose=require('mongoose');
-var bodyParser=require('body-parser');
-var Contact = require('./model/contact');
-async      = require('async');
-var cors = require('cors');
+const path = require('path');
+const PORT=process.env.PORT || 8000;
+const http=require('http').Server(app);
+const mongoose=require('mongoose');
+const bodyParser=require('body-parser');
+const Contact = require('./model/contact');
+const async      = require('async');
+const cors = require('cors');
+const contactRoutes = require('./router/contactRoutes');
+const routes 		= require(path.resolve('./config/router'));
+
 
 
 mongoose.connect('mongodb://localhost:27017/contact');
@@ -51,143 +55,9 @@ var corsOptionsDelegate = function (req, callback) {
 //       },
 // }))
 
-app.get('/api/contacts',function (req, res) {
-    let obj=req.query;
-    // var limit=page.limit ?parseInt(page.limit):5
-   let limit=5
-  let page=(obj.page)?parseInt(obj.page):1
-  let _skip=(page-1)*limit;
-  
-    async.parallel({
-        Count:(callback)=>{
-            Contact.count(callback)},
-        contacts:(callback)=>{
-            Contact.aggregate(
-                [
-                    {
-                        $project :{
-                            "_id":1,
-                            "name":1,
-                            "email":1,
-                            "phno":1,
-                            "address":1
-                        }
-                    },
-                  
-                   { 
-                    $skip :_skip
-                   },
-                   { 
-                    $limit : limit 
-                   }
-                ],callback)
-        }
 
-    },(err,result)=>{
-        if(err){
-            return res.status(500).json({message:err})
-        }
-        else{
-            let countResult = (result.contacts) ? result.contacts.length : 0,
-            pageCount = countResult !== 0 ? parseInt(Math.ceil(result.Count / limit) ):0;
-            return res.status(200).json(
-                {
-                    contacts:result.contacts,
-                    pageCount:pageCount
-                })
-        }
-    })
-   
-
-});
-
-app.delete('/contact/:id',(req,res)=>{
-    Contact.remove({
-        _id:req.params.id
-    },(err,result)=>{
-        if (err) {
-            res.send({
-                error: err,
-                status: false
-            })
-        } else {
-            res.send({
-                contacts:result,
-                status: true
-            })
-        }
-    })
-});
-    
-  
-
-app.post('/contact',  function (req, res) {
-    var contact = req.body;
-    var newContact = new Contact({
-        name: req.body.name,
-        address:req.body.address,
-        phno:req.body.phno,
-        email: req.body.email,
-      })
-    console.log(req.body);
-    
-    newContact.save(function (err, _contact) {
-        if (err) {
-            res.json({
-                error: err,
-                status: false
-            })
-        } else {
-            res.json({
-                contact: _contact,
-                status: true
-            })
-        }
-    })
-});
-
-app.get('/contact/:id',function (req, res) {
-    Contact.findOne({
-        _id: req.params.id
-    }, function (err, _contact) {
-        if (err) {
-            res.status(500).json({
-                error: err,
-                status: false
-            })
-        } else {
-            res.json({
-                contact: _contact,
-                status: true
-            })
-        }
-    })
-});
-
-app.put('/contact/update/:id',function(req,res){
-    var contact=req.body;
-    console.log(req.body);
-    Contact.findByIdAndUpdate({
-        _id:req.params.id
-    },{
-        $set:contact
-    },function(err,result){
-        if(err){
-            res.status(500).json({
-                erorr:err,
-                status:false
-            })
-        }
-        else{
-            res.json({
-                contact:result,
-                status:true,
-                message:"Updated Successfully"
-            })
-        }
-    })
-});
-
+app.use('/adminapi',routes.admin)
+app.use('/',contactRoutes)
 
 http.listen(PORT, function(err){
     if(err){

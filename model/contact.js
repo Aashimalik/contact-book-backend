@@ -5,6 +5,14 @@ var contactSchema = new Schema({
     address:String,
     phno:String,
     email:String,
-   
+    status:{
+        type:Boolean,
+        default:false
+    },
+},{
+    timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+    }
 });
 module.exports = mongoose.model('Contact',contactSchema);
