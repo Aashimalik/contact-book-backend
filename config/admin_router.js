@@ -1,6 +1,7 @@
 const path 	= require('path');
 const fs=require('fs');
 const express=require('express');
+const expressJWT 	= require('express-jwt');
 // const routes=express.Router();
 
 let ctrls = {};
@@ -9,6 +10,8 @@ fs.readdirSync(path.resolve('./controller')).forEach(file => {
 	ctrls[name] = require(path.resolve(`./controller/${name}`));
 });
 
+
+
 module.exports = {
     routes:[
         { url: '/api/contacts',method: ctrls.showallCtrl.all, type: 'get'},
@@ -16,5 +19,7 @@ module.exports = {
         { url: '/contact/:id',method: ctrls.deleteCtrl.delete, type: 'delete'},
         { url: '/contact/update/:id',method: ctrls.updateCtrl.update, type: 'put'},
         { url: '/contact/:id',method: ctrls.particularCtrl.show, type: 'get' }, 
+        { url: '/user/sign' ,method:ctrls.userCtrl.register,type :'post'},
+        { url: '/user/login',method:ctrls.userCtrl.login,type:'post'},
     ]
 };

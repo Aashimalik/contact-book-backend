@@ -15,3 +15,5 @@ module.exports = (connectedRouter, x) => {
 		throw new Error('Invalid method type');
 	}
 }
+
+

@@ -10,15 +10,20 @@ const async      = require('async');
 const cors = require('cors');
 const contactRoutes = require('./router/contactRoutes');
 const routes 		= require(path.resolve('./config/router'));
+const database	= require(path.resolve('./config/database'));
+const expressJWT 	= require('express-jwt');
+// const dotenv =require('dotenv');
 
 
 
-mongoose.connect('mongodb://localhost:27017/contact');
+mongoose.connect(database.url);
+mongoose.set('debug',true);
 app.use(bodyParser.urlencoded({extended:true}));
  var whitelist = ['http://localhost', 'http://localhost:3001','http://localhost:3000','http://localhost:8000','localhost:8000/contact']
 
 app.use(bodyParser.json());
 
+ 
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (whitelist.indexOf(req.header('Origin')) !== -1) {
@@ -57,7 +62,7 @@ var corsOptionsDelegate = function (req, callback) {
 
 
 app.use('/adminapi',routes.admin)
-app.use('/',contactRoutes)
+// app.use('/',contactRoutes)
 
 http.listen(PORT, function(err){
     if(err){

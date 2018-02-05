@@ -5,6 +5,7 @@ const
 
 
 exports.all=(req,res)=>{
+  
     let obj=req.query;
    let limit=5
   let page=(obj.page)?parseInt(obj.page):1
