@@ -12,6 +12,8 @@ const contactRoutes = require('./router/contactRoutes');
 const routes 		= require(path.resolve('./config/router'));
 const database	= require(path.resolve('./config/database'));
 const expressJWT 	= require('express-jwt');
+const socket = require('socket.io');
+io = socket(http);
 // const dotenv =require('dotenv');
 
 
@@ -64,10 +66,23 @@ var corsOptionsDelegate = function (req, callback) {
 app.use('/adminapi',routes.admin)
 // app.use('/',contactRoutes)
 
+
+
 http.listen(PORT, function(err){
     if(err){
         console.log(err);
     }else{
         console.log('listening on *:'+PORT);
     }  
+});
+
+
+io = socket(http);
+
+io.on('connection', (socket) => {
+    console.log(socket.id);
+
+    socket.on('SEND_MESSAGE', function(data){
+        io.emit('RECEIVE_MESSAGE', data);
+    })
 });

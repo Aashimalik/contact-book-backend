@@ -4,7 +4,9 @@ const
 
 
 exports.update=(req,res)=>{
+    
     var contact=req.body;
+
       Contact.findByIdAndUpdate({
         _id:req.params.id
     },{

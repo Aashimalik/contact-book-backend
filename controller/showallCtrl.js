@@ -23,7 +23,8 @@ exports.all=(req,res)=>{
                             "name":1,
                             "email":1,
                             "phno":1,
-                            "address":1
+                            "address":1,
+                            "status":1
                         }
                     },
                   
