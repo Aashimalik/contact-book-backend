@@ -16,7 +16,8 @@ admin.use(expressJWT({
 	path:[
 		'/adminapi/user/login',
         '/adminapi/user/sign',
-        // '/adminapi/api/contacts'
+        '/adminapi/user/reset',
+        /^\/adminapi\/verify\/.*/
         
 	]
 }));

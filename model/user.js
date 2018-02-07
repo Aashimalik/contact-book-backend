@@ -2,6 +2,7 @@ const mongoose 	= require('mongoose'),
 crypto 		= require('crypto'),
 path 		= require('path'),
 core 	 	= require('../config/core'),
+
 Schema 		= mongoose.Schema,
 
 UserSchema 	= new Schema({
@@ -10,6 +11,18 @@ UserSchema 	= new Schema({
 		unique: true,
 		required: true
 	},
+	email:{
+		type: String,
+		unique: true,
+	},
+	emailVerificationKey: {
+        type: String
+  },
+ verified: {
+ 	type:Boolean,
+ 	default:false
+
+  },
 	password: {
 		type: String,
 		required: true
@@ -28,6 +41,9 @@ UserSchema 	= new Schema({
 UserSchema.pre('save', function(next){
 	var user = this;
 	if(this.isModified('password') || this.isNew){
+		if(this.isNew){
+            user.emailVerificationKey   = crypto.createHash('md5').update((user.username + Math.floor((Math.random() * 1000) + 1))).digest("hex");
+        }
 		user.password = this.hashPassword(core.salt, user.password);
 		next();
 	} else {

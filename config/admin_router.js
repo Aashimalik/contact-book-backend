@@ -21,5 +21,7 @@ module.exports = {
         { url: '/contact/:id',method: ctrls.particularCtrl.show, type: 'get' }, 
         { url: '/user/sign' ,method:ctrls.userCtrl.register,type :'post'},
         { url: '/user/login',method:ctrls.userCtrl.login,type:'post'},
+        { url: '/user/reset',method:ctrls.userCtrl.reset,type:'post'},
+        { url: '/verify/:hashkey',method:ctrls.userCtrl.verify,type:'get'},
     ]
 };
