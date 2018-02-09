@@ -166,7 +166,7 @@ exports.add=function(req,res,next){
  	{
  		$set:_body
  		
- 	},function(err,result){
+ 	},{new:true},function(err,result){
  		if(err){
  			res.send(err)
  		}else{
