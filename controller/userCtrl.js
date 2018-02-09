@@ -122,6 +122,8 @@ exports.reset=function(req,res,next){
 	})
 }
 
+//verification link generator
+
 exports.verify=function(req,res,next){
 	console.log("insed verify",req.params.hashkey)
 	let emailVerificationKey    = req.params.hashkey;
