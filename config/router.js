@@ -17,6 +17,7 @@ admin.use(expressJWT({
 		'/adminapi/user/login',
         '/adminapi/user/sign',
         '/adminapi/user/reset',
+        '/adminapi/user/add',
         /^\/adminapi\/verify\/.*/
         
 	]

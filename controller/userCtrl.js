@@ -125,7 +125,6 @@ exports.reset=function(req,res,next){
 //verification link generator
 
 exports.verify=function(req,res,next){
-	console.log("insed verify",req.params.hashkey)
 	let emailVerificationKey    = req.params.hashkey;
 	User.findOneAndUpdate({emailVerificationKey:emailVerificationKey},{
 		$set:{
@@ -143,5 +142,58 @@ exports.verify=function(req,res,next){
 		}
 	})
 
+
+}
+
+exports.add=function(req,res,next){
+
+	let image={},_body;
+	if( req.files.length > 0 ) {
+		req.files.forEach(x => {
+			image.path = x.path;
+			image.name = x.originalname;
+		});
+	}
+	if( !_.isEmpty(image) ) {
+		_body = _.assign(req.body.profile_image, {profile_image: image});	
+	} else {
+		_body = req.body;
+	}
+ 	console.log(_body)
+ 	User.findOneAndUpdate({
+ 		email:req.body.email
+ 	},
+ 	{
+ 		$set:_body
+ 		
+ 	},function(err,result){
+ 		if(err){
+ 			res.send(err)
+ 		}else{
+ 			console.log(result)
+ 			res.json({
+ 				user:result,
+				message:"Profile Updated Successfully",
+				status:"true"
+			})
+ 		}
+ 	})
+
+	// async.waterfall([
+	// 	function (done) {
+	// 		User.update(
+	// 			{ email: req.body.email },
+	// 			{$set:_body},done);
+	// 	},
+	// 	function (result, done) {
+	// 		User.findOne({email: _body.email},{password:0, salt: 0}, done);
+	// 	}
+	// ],function (err, user) {
+	// 		if(err){
+	// 			return res.json(response.error(err));
+	// 		}
+	// 		res.json(response.success(user));
+	// 	}
+	// )
 
 }

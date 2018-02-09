@@ -2,10 +2,21 @@ const mongoose 	= require('mongoose'),
 crypto 		= require('crypto'),
 path 		= require('path'),
 core 	 	= require('../config/core'),
+config		= require('../core/env/extension'),
 
 Schema 		= mongoose.Schema,
 
 UserSchema 	= new Schema({
+	profile_image:{
+		name:{
+			type:String,
+			default:config.image_name
+		},
+		path:{
+			type:String,
+			default:config.image_path
+		}
+	},
 	username: {
 		type: String,
 		unique: true,
