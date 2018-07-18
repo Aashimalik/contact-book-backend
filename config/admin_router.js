@@ -1,6 +1,6 @@
 const path 	= require('path');
 const fs=require('fs');
-_           = require('lodash');
+ const  _   = require('lodash');
 const multer = require('multer');
 const express=require('express');
 const crypto=require("crypto");

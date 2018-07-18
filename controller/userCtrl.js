@@ -146,7 +146,7 @@ exports.verify=function(req,res,next){
 }
 
 exports.add=function(req,res,next){
-
+console.log("inside",req.files)
 	let image={},_body;
 	if( req.files.length > 0 ) {
 		req.files.forEach(x => {
@@ -171,6 +171,8 @@ exports.add=function(req,res,next){
  			res.send(err)
  		}else{
  			console.log(result)
+ 			result.password=undefined;
+ 			result.emailVerificationKey=undefined;
  			res.json({
  				user:result,
 				message:"Profile Updated Successfully",

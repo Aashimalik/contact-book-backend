@@ -13,7 +13,7 @@ const routes 		= require(path.resolve('./config/router'));
 const database	= require(path.resolve('./config/database'));
 const expressJWT 	= require('express-jwt');
 const socket = require('socket.io');
-io = socket(http);
+
 // const dotenv =require('dotenv');
 
 
@@ -77,12 +77,3 @@ http.listen(PORT, function(err){
 });
 
 
-io = socket(http);
-
-io.on('connection', (socket) => {
-    console.log(socket.id);
-
-    socket.on('SEND_MESSAGE', function(data){
-        io.emit('RECEIVE_MESSAGE', data);
-    })
-});
